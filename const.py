@@ -14,8 +14,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import Platform
-from homeassistant.helpers.entity import EntityCategory
+from homeassistant.const import Platform, EntityCategory
 
 DOMAIN = "freebox_home"
 SERVICE_REBOOT = "reboot"

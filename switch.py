@@ -10,6 +10,7 @@ from freebox_api.exceptions import InsufficientPermissionsError
 
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import DeviceInfo
@@ -19,6 +20,16 @@ from .const import DOMAIN
 from .router import FreeboxRouter
 
 _LOGGER = logging.getLogger(__name__)
+
+
+SWITCH_DESCRIPTIONS = [
+    SwitchEntityDescription(
+        key="wifi",
+        name="Freebox WiFi",
+        entity_category=EntityCategory.CONFIG,
+    )
+]
+
 
 
 async def async_setup_entry(
