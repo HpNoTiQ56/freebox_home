@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from freebox_api import Freepybox
+from freebox_api.api.call import Call
 from freebox_api.api.wifi import Wifi
 from freebox_api.exceptions import HttpRequestError, NotOpenError
 
@@ -200,6 +201,11 @@ class FreeboxRouter:
     def sensors(self) -> dict[str, Any]:
         """Return sensors."""
         return {**self.sensors_temperature, **self.sensors_connection}
+     
+    @property
+    def call(self) -> Call:
+        """Return the call."""
+        return self._api.call
 
     @property
     def wifi(self) -> Wifi:
