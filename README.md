@@ -6,4 +6,4 @@ This is a fork of the embedded Freebox integration which implements the original
 Clone this repository to your custom_components folder and refer to Freebox integration help.
 This Readme will be updated.
 
-TODO: todo
+TODO: Alarme à implémenter
