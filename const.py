@@ -14,7 +14,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import Platform, EntityCategory
+from homeassistant.const import Platform, EntityCategory, PERCENTAGE
 
 DOMAIN = "freebox_home"
 SERVICE_REBOOT = "reboot"
