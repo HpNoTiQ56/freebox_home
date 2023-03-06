@@ -10,7 +10,7 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import DATA_RATE_KILOBYTES_PER_SECOND, TEMP_CELSIUS
+from homeassistant.const import PERCENTAGE, UnitOfDataRate, UnitOfTemperature
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity import DeviceInfo
@@ -18,9 +18,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 import homeassistant.util.dt as dt_util
 
 from .const import (
-    CALL_SENSORS,
-    CONNECTION_SENSORS,
-    DISK_PARTITION_SENSORS,
     DOMAIN,
     HOME_NODES_ALARM_REMOTE_KEY,
     HOME_NODES_SENSORS,
@@ -28,6 +25,40 @@ from .const import (
 from .router import FreeboxRouter
 
 _LOGGER = logging.getLogger(__name__)
+
+CONNECTION_SENSORS: tuple[SensorEntityDescription, ...] = (
+    SensorEntityDescription(
+        key="rate_down",
+        name="Freebox download speed",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.KILOBYTES_PER_SECOND,
+        icon="mdi:download-network",
+    ),
+    SensorEntityDescription(
+        key="rate_up",
+        name="Freebox upload speed",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.KILOBYTES_PER_SECOND,
+        icon="mdi:upload-network",
+    ),
+)
+
+CALL_SENSORS: tuple[SensorEntityDescription, ...] = (
+    SensorEntityDescription(
+        key="missed",
+        name="Freebox missed calls",
+        icon="mdi:phone-missed",
+    ),
+)
+
+DISK_PARTITION_SENSORS: tuple[SensorEntityDescription, ...] = (
+    SensorEntityDescription(
+        key="partition_free_space",
+        name="free space",
+        native_unit_of_measurement=PERCENTAGE,
+        icon="mdi:harddisk",
+    ),
+)
 
 
 async def async_setup_entry(
@@ -49,7 +80,7 @@ async def async_setup_entry(
             SensorEntityDescription(
                 key=sensor_name,
                 name=f"Freebox {sensor_name}",
-                native_unit_of_measurement=TEMP_CELSIUS,
+                native_unit_of_measurement=UnitOfTemperature.CELSIUS,
                 device_class=SensorDeviceClass.TEMPERATURE,
             ),
             router.mac,
@@ -115,7 +146,7 @@ class FreeboxSensor(SensorEntity):
     def async_update_state(self) -> None:
         """Update the Freebox sensor."""
         state = self._router.sensors[self.entity_description.key]
-        if self.native_unit_of_measurement == DATA_RATE_KILOBYTES_PER_SECOND:
+        if self.native_unit_of_measurement == UnitOfDataRate.KILOBYTES_PER_SECOND:
             self._attr_native_value = round(state / 1000, 2)
         else:
             self._attr_native_value = state
